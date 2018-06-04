@@ -1,0 +1,27 @@
+@import url('~bootstrap/dist/css/bootstrap.min.css');
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'PT Sans', sans-serif;
+  background-color: #448AFF;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  background-color: #ffffff;
+  box-shadow: 0 0 20px 5px#61616169;
+  border-radius: .5rem;
+  min-height: 30rem;
+  padding: 2rem 3rem;
+}
