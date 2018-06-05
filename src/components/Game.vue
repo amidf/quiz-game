@@ -5,22 +5,45 @@
       <p class="question" v-html="question.question"></p>
       <div class="options">
         <span v-for="(option, index) in options" v-bind:key="index">
-          <input type="radio" v-bind:disabled="disable" v-model="answer" name="question" v-bind:value="option">
+          <input 
+            type="radio"
+            name="question"
+            v-bind:disabled="disable" 
+            v-model="answer" 
+            v-bind:value="option"
+          >
           <span class="option" v-html="option"></span>
         </span>
       </div>
     </div>
     <div class="btns">
       <div>
-        <button @click="submit" v-bind:disabled="answer === '' || disable" class="btn btn-primary">Submit</button>
-        <button @click="next" v-bind:disabled="!disable" class="btn btn-primary">Next</button>
+        <button 
+          @click="submit"
+          v-bind:disabled="answer === '' || disable"
+          class="btn btn-primary">Submit</button>
+        <button 
+          @click="next"
+          v-bind:disabled="!disable"
+          class="btn btn-primary"
+        >
+          Next
+        </button>
       </div>
       <div>
         <router-link class="btn" v-bind:to="{name: 'Home'}">Home</router-link>
         <router-link class="btn" v-bind:to="{name: 'Settings'}">Settings</router-link>
       </div>
     </div>
-    <span class="answer" v-bind:class="{correct: correct === true, incorrect: correct === false}">{{ msg }}</span>
+    <span 
+      class="answer"
+      v-bind:class="{
+        correct: correct === true,
+        incorrect: correct === false
+      }"
+      >
+      {{ msg }}
+      </span>
   </div>
 </template>
 

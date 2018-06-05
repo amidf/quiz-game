@@ -1,23 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-const $ = require('jquery')
-
-function getQuestions (commit, options) {
-  console.log(options)
-  $.ajax({
-    url: `https://opentdb.com/api.php?amount=${options.amount}&category=${options.category}&difficulty=${options.difficulty}&type=${options.type}`,
-    dataType: 'json',
-    success (res, status, xhr) {
-      if (res.response !== 1) {
-        commit('addQuestions', res.results)
-      }
-    },
-    error (xhr) {
-      console.log(xhr)
-    }
-  })
-}
+import { getQuestions } from './../js/Util'
 
 const state = {
   username: 'Player',

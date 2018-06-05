@@ -1,3 +1,5 @@
+const $ = require('jquery')
+
 function shuffle (array) {
   let currentIndex = array.length
   let temporaryValue
@@ -15,6 +17,23 @@ function shuffle (array) {
   return array
 }
 
+function getQuestions (commit, options) {
+  console.log(options)
+  $.ajax({
+    url: `https://opentdb.com/api.php?amount=${options.amount}&category=${options.category}&difficulty=${options.difficulty}&type=${options.type}`,
+    dataType: 'json',
+    success (res, status, xhr) {
+      if (res.response !== 1) {
+        commit('addQuestions', res.results)
+      }
+    },
+    error (xhr) {
+      console.log(xhr)
+    }
+  })
+}
+
 module.exports = {
-  shuffle
+  shuffle,
+  getQuestions
 }

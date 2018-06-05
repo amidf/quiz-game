@@ -4,38 +4,81 @@
     <div class="form">
       <div class="form-group">
         <label for="username">Username</label>
-        <input class="form-control" type="text" v-model="username" name="username" id="username" required>
-        <div class="invalid-feedback" v-bind:class="{show: check.username}">
+        <input 
+          class="form-control"
+          type="text"
+          name="username"
+          id="username"
+          v-model="username" 
+          required
+        >
+        <div class="invalid-feedback" v-bind:class="{show: !check.username}">
           Please enter the name
         </div>
       </div>
       <div class="form-group">
         <label for="numberOfQuestions">How many questions? (Min 1 and max 20)</label>
-        <input class="form-control" type="number" min="1" max="20" v-model="numberOfQuestions" required>
+        <input 
+          class="form-control"
+          type="number"
+          min="1"
+          max="20"
+          v-model="numberOfQuestions"
+          required
+        >
         <div class="invalid-feedback" v-bind:class="{show: check.questions}">
           Please choose number from 1 to 20
         </div>
       </div>
       <div class="form-group">
         <label for="category">Category</label>
-        <select name="category" v-model="category" class="form-control" id="category">
-          <option v-bind:value="index" v-bind:key="index" v-for="(category, index) in categories">
+        <select
+          name="category"
+          class="form-control"
+          id="category"
+          v-model="category"
+        >
+          <option 
+            v-bind:value="index"
+            v-bind:key="index"
+            v-for="(category, index) in categories"
+          >
             {{ category }}
           </option>
         </select>
       </div>
       <div class="form-group">
         <label for="difficulty">Difficulty</label>
-        <select name="difficulty" v-model="difficulty" class="form-control" id="difficulty">
-          <option v-bind:value="difficulty.value" v-bind:key="index" v-for="(difficulty, index) in difficulties">
+        <select
+          name="difficulty"
+          class="form-control"
+          id="difficulty"
+          v-model="difficulty"
+        >
+          <option
+            v-bind:value="difficulty.value"
+            v-bind:key="index"
+            v-for="(difficulty, index) in difficulties"
+          >
             {{ difficulty.name }}
           </option>
         </select>
       </div>
       <div class="form-group">
         <label for="type">Type</label>
-        <select class="form-control" v-model="type" name="type" id="type">
-          <option v-for="(type, index) in types" v-bind:key="index" v-bind:value="type.value">{{ type.type }}</option>
+        <select
+          class="form-control"
+          name="type"
+          id="type"
+          v-model="type"
+        >
+          <option
+            v-for="(type, index) in types"
+            v-bind:key="index"
+            v-bind:value="type.value"
+          >
+          {{ type.type }}
+          </option>
         </select>
       </div>
     </div>
@@ -69,8 +112,8 @@ export default {
     },
     check () {
       return {
-        username: this.username === '',
-        questions: !((this.numberOfQuestions >= 1) && (this.numberOfQuestions <= 20))
+        username: this.username !== '',
+        questions: (this.numberOfQuestions >= 1) && (this.numberOfQuestions <= 20)
       }
     },
     difficulties () {

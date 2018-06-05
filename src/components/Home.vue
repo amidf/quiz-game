@@ -9,10 +9,7 @@
 
 <script>
 export default {
-  name: 'Home',
-  created () {
-    this.$store.commit('resetGame')
-  }
+  name: 'Home'
 }
 </script>
 
