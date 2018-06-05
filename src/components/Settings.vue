@@ -4,14 +4,42 @@
     <div class="form">
       <div class="form-group">
         <label for="username">Username</label>
-        <input class="form-control" type="text" v-model="username" name="username" id="username">
+        <input class="form-control" type="text" v-model="username" name="username" id="username" required>
+        <div class="invalid-feedback" v-bind:class="{show: check.username}">
+          Please enter the name
+        </div>
       </div>
       <div class="form-group">
         <label for="numberOfQuestions">How many questions? (Min 1 and max 20)</label>
-        <input class="form-control" type="number" min="1" max="20" v-model="numberOfQuestions">
+        <input class="form-control" type="number" min="1" max="20" v-model="numberOfQuestions" required>
+        <div class="invalid-feedback" v-bind:class="{show: check.questions}">
+          Please choose number from 1 to 20
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select name="category" v-model="category" class="form-control" id="category">
+          <option v-bind:value="index" v-bind:key="index" v-for="(category, index) in categories">
+            {{ category }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="difficulty">Difficulty</label>
+        <select name="difficulty" v-model="difficulty" class="form-control" id="difficulty">
+          <option v-bind:value="difficulty.value" v-bind:key="index" v-for="(difficulty, index) in difficulties">
+            {{ difficulty.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select class="form-control" v-model="type" name="type" id="type">
+          <option v-for="(type, index) in types" v-bind:key="index" v-bind:value="type.value">{{ type.type }}</option>
+        </select>
       </div>
     </div>
-    <button class="btn btn-primary" @click="startGame">Begin</button>
+    <button type="submit" class="btn btn-primary" @click="startGame">Begin</button>
     <router-link class="btn" v-bind:to="{name: 'Home'}">Back</router-link>
   </div>
 </template>
@@ -21,20 +49,54 @@ export default {
   name: 'Settings',
   created () {
     this.username = this.$store.state.username
+    this.$store.commit('resetGame')
   },
   data () {
     return {
       username: '',
-      numberOfQuestions: 1
+      numberOfQuestions: 1,
+      category: 0,
+      type: '',
+      difficulty: ''
+    }
+  },
+  computed: {
+    categories () {
+      return this.$store.state.categories
+    },
+    types () {
+      return this.$store.state.types
+    },
+    check () {
+      return {
+        username: this.username === '',
+        questions: !((this.numberOfQuestions >= 1) && (this.numberOfQuestions <= 20))
+      }
+    },
+    difficulties () {
+      return this.$store.state.difficulties
     }
   },
   methods: {
     startGame () {
-      this.$store.dispatch('startGame', {
-        username: this.username
-      })
-      this.$store.dispatch('addQuestions', this.numberOfQuestions)
-      this.$router.push({name: 'Game'})
+      if (this.username !== '' && (this.numberOfQuestions >= 1) && (this.numberOfQuestions <= 20)) {
+        this.$store.dispatch('startGame', {
+          username: this.username,
+          questions: this.numberOfQuestions
+        })
+
+        if (this.category == 0) {
+          this.category = ''
+        } 
+        
+        this.$store.dispatch('addQuestions', {
+          amount: this.numberOfQuestions,
+          category: this.category,
+          type: this.type,
+          difficulty: this.difficulty
+        })
+        this.$router.push({name: 'Game'})
+      }
     }
   }
 }
@@ -42,5 +104,8 @@ export default {
 
 <style lang="scss" scoped>
   @import url('./../scss/Settings.scss');
+  .invalid-feedback.show {
+    display: block !important;
+  }
 </style>
 

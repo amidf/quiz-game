@@ -3,12 +3,15 @@ import Vuex from 'vuex'
 
 const $ = require('jquery')
 
-function getQuestions (commit, n) {
+function getQuestions (commit, options) {
+  console.log(options)
   $.ajax({
-    url: `https://opentdb.com/api.php?amount=${n}`,
+    url: `https://opentdb.com/api.php?amount=${options.amount}&category=${options.category}&difficulty=${options.difficulty}&type=${options.type}`,
     dataType: 'json',
     success (res, status, xhr) {
-      commit('addQuestions', res.results)
+      if (res.response !== 1) {
+        commit('addQuestions', res.results)
+      }
     },
     error (xhr) {
       console.log(xhr)
@@ -20,7 +23,45 @@ const state = {
   username: 'Player',
   correct: 0,
   questions: [],
-  leaders: []
+  leaders: [],
+  difficulties: [
+    {name: 'Any', value: ''},
+    {name: 'Easy', value: 'easy'},
+    {name: 'Medium', value: 'medium'},
+    {name: 'Hard', value: 'hard'}
+  ],
+  types: [
+    {type: 'Any', value: ''},
+    {type: 'Multitple', value: 'multiple'},
+    {type: 'True or False', value: 'boolean'}
+  ],
+  categories: [
+    'Any',
+    'General Knowledge',
+    'Entertainment: Books',
+    'Entertainment: Film',
+    'Entertainment: Music',
+    'Entertainment: Musicals & Theatres',
+    'Entertainment: Television',
+    'Entertainment: Video Games',
+    'Entertainment: Board Games',
+    'Science & Nature',
+    'Science: Computers',
+    'Science: Mathematics',
+    'Mythology',
+    'Sports',
+    'Geography',
+    'History',
+    'Politics',
+    'Art',
+    'Celebrities',
+    'Animals',
+    'Vehicles',
+    'Entertainment: Comics',
+    'Science: Gadgets',
+    'Entertainment: Japanese Anime & Manga',
+    'Entertainment: Cartoon & Animations'
+  ]
 }
 
 const mutations = {
@@ -56,13 +97,12 @@ const mutations = {
 }
 
 const actions = {
-  startGame ({ commit }, user) {
-    commit('resetGame')
-    commit('refreshLeaders')
+  startGame ({ commit, dispatch }, user) {
     commit('refreshUser', user)
+    dispatch('addQuestions', user.questions)
   },
-  addQuestions ({ commit }, n) {
-    getQuestions(commit, n)
+  addQuestions ({ commit }, options) {
+    getQuestions(commit, options)
   },
   clearList ({ commit }) {
     commit('clearList')
